@@ -1,0 +1,9 @@
+@import 'mixins.scss';
+@import 'variables.scss';
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $white;
+  font-family: $main-font;
+}
