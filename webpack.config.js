@@ -21,6 +21,36 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: './images',
+              name: '[name].[ext]',
+            },
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true, // webpack@1.x
+              disable: true, // webpack@2.x and newer
+              outputPath: './images',
+              name: '[name].[ext]',
+            },
+          },
+        ],
+      },
+      /* {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+        loader: 'file-loader',
+        options: {
+          outputPath: './images',
+          name: '[name].[ext]',
+        },
+      }, */
     ],
   },
 };
