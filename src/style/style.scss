@@ -7,3 +7,155 @@ body {
   background-color: $white;
   font-family: $main-font;
 }
+
+#navbar {
+  position: sticky;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  background-color: $yellow;
+  div {
+    &:first-child {
+      margin-left: 20px;
+      cursor: pointer;
+    }
+    &:nth-child(2) {
+      margin-right: 20px;
+      cursor: pointer;
+    }
+  }
+}
+
+#taskHeader {
+  position: sticky;
+  top: 0;
+  position: -webkit-sticky;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: $white;
+  background-color: $blue; // blue or red
+  div {
+    &:first-child {
+      margin-left: 20px;
+      h1 {
+        @include header1;
+      }
+    }
+    &:nth-child(2) {
+      margin-right: 20px;
+      img {
+        &:first-child {
+          @include cursorPointer;
+        }
+        &:nth-child(2) {
+          margin: 0 8px;
+          @include cursorPointer;
+        }
+        &:nth-child(3) {
+          @include cursorPointer;
+        }
+      }
+    }
+  }
+}
+
+.to-do-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 20px;
+  .to-do-left {
+    display: flex;
+    align-items: center;
+    .tick-button {
+      @include cursorPointer;
+      border: 1px solid $blue;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      margin-right: 8px;
+    }
+    .to-do-main {
+      .task-name {
+        @include task1;
+        max-width: 500px;
+        overflow: hidden;
+      }
+      .project-attributes {
+        display: flex;
+        align-items: center;
+        .project-name {
+          @include taskDetails;
+        }
+        .deadline {
+          @include taskDetails;
+          margin: 0 8px;
+        }
+        .priority {
+          border-radius: 50%;
+          width: 10px;
+          height: 10px;
+          background-color: $green;
+        }
+      }
+    }
+  }
+  .to-do-buttons {
+    display: flex;
+    align-items: center;
+    img {
+      &:first-child {
+        margin: 0 8px;
+        @include cursorPointer;
+      }
+      &:nth-child(2) {
+        @include cursorPointer;
+      }
+    }
+  }
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  display: none;
+  .menu-nav {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    .menu-nav-element {
+      display: flex;
+      align-items: center;
+      img {
+        @include cursorPointer;
+      }
+      .menu-text-1 {
+        @include menu-text-1;
+        @include cursorPointer;
+        margin-left: 16px;
+      }
+    }
+  }
+  .menu-projects {
+    margin-left: 20px;
+    margin-top: 32px;
+    div:first-child {
+      @include projectHeader;
+    }
+    ul {
+      padding: 0;
+      margin-left: 16px;
+      max-width: 300px;
+      overflow: scroll;
+      li {
+        @include menu-text-2;
+        @include cursorPointer; //long
+        list-style: none;
+        padding-bottom: 4px;
+      }
+    }
+  }
+}
