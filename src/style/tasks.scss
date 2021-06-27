@@ -1,0 +1,55 @@
+.to-do-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 20px;
+  .to-do-left {
+    display: flex;
+    align-items: center;
+    .tick-button {
+      @include cursorPointer;
+      border: 1px solid $blue;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      margin-right: 8px;
+    }
+    .to-do-main {
+      .task-name {
+        @include task1;
+        max-width: 500px;
+        overflow: hidden;
+      }
+      .project-attributes {
+        display: flex;
+        align-items: center;
+        .project-name {
+          @include taskDetails;
+        }
+        .deadline {
+          @include taskDetails;
+          margin: 0 8px;
+        }
+        .priority {
+          border-radius: 50%;
+          width: 10px;
+          height: 10px;
+          background-color: $green;
+        }
+      }
+    }
+  }
+  .to-do-buttons {
+    display: flex;
+    align-items: center;
+    img {
+      &:first-child {
+        margin: 0 8px;
+        @include cursorPointer;
+      }
+      &:nth-child(2) {
+        @include cursorPointer;
+      }
+    }
+  }
+}

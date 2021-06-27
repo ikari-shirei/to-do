@@ -1,0 +1,78 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  display: none;
+  .menu-nav {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    .menu-nav-element {
+      display: flex;
+      align-items: center;
+      img {
+        @include cursorPointer;
+      }
+      .menu-text-1 {
+        @include menu-text-1;
+        @include cursorPointer;
+        margin-left: 16px;
+      }
+    }
+  }
+  .menu-projects {
+    margin-left: 20px;
+    margin-top: 32px;
+    div:first-child {
+      @include projectHeader;
+    }
+    .form {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 16px 20px 16px 0;
+      form {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 316px;
+        div {
+          input {
+            margin: 8px 16px 0px 0;
+            max-width: 180px;
+          }
+          button {
+            margin: 8px 8px 0px 0px;
+            min-width: 60px;
+            @include cursorPointer;
+          }
+        }
+      }
+    }
+    #projectList {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 0;
+      margin-left: 16px;
+      max-width: 300px;
+      overflow: hidden;
+      .project-div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 300px;
+        padding-bottom: 4px;
+        .project-div-e1 {
+          @include menu-text-2;
+          @include cursorPointer;
+          overflow: hidden;
+          scroll-behavior: smooth;
+        }
+        .project-div-e2 {
+          z-index: 99;
+          @include cursorPointer;
+        }
+      }
+    }
+  }
+}

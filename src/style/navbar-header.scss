@@ -1,0 +1,52 @@
+#navbar {
+  position: sticky;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  background-color: $yellow;
+  div {
+    &:first-child {
+      margin-left: 20px;
+      cursor: pointer;
+    }
+    &:nth-child(2) {
+      margin-right: 20px;
+      cursor: pointer;
+    }
+  }
+}
+
+#taskHeader {
+  position: sticky;
+  top: 0;
+  position: -webkit-sticky;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: $white;
+  background-color: $blue; // blue or red
+  div {
+    &:first-child {
+      margin-left: 20px;
+      h1 {
+        @include header1;
+      }
+    }
+    &:nth-child(2) {
+      margin-right: 20px;
+      img {
+        &:first-child {
+          @include cursorPointer;
+        }
+        &:nth-child(2) {
+          margin: 0 8px;
+          @include cursorPointer;
+        }
+        &:nth-child(3) {
+          @include cursorPointer;
+        }
+      }
+    }
+  }
+}
