@@ -1,8 +1,7 @@
-// This should be lists but since I used project keyword everywhere...
+import createTaskDOM from '/src/modules/task-create-DOM.js';
+let $ = require('jquery');
 
-(function projectModule() {
-  let $ = require('jquery');
-
+(function projectsAndTasks() {
   const LOCAL_STORAGE_PROJECT_KEY = 'task.projects';
 
   let projects =
@@ -19,9 +18,16 @@
     return { name, id, tasks };
   }
 
+  let allTasks = [];
+
+  let addTaskButton = $('#addTask');
+  let toDoSection = $('.to-do-section');
+  let taskHeader = $('#taskHeader');
+
   let projectsContainer = $('#projectList');
   let addProjectButton = $('#addProjectButton');
   let projectInput = $('#pName');
+  let allTasksButton = $('all-tasks');
 
   function renderProjects() {
     clearElements(projectsContainer);
@@ -90,4 +96,85 @@
       }
     });
   })();
+
+  //Tasks
+
+  function taskFactory(name, project, deadline, priority, id) {
+    return { name, project, deadline, priority, id };
+  }
+
+  function renderTasks(project) {
+    clearElements(toDoSection);
+    project.forEach((task) => {
+      createTaskDOM(
+        task.name,
+        task.project,
+        task.deadline,
+        task.priority,
+        task.id
+      );
+    });
+  }
+
+  function clearElements(container) {
+    if (container.children()) {
+      container.children().remove();
+    }
+  }
+
+  function addNewTask() {
+    addTaskButton.on('click', () => {
+      let taskName = prompt('Task NAme');
+      /*  let projectName = prompt('Project Name'); */
+      let deadline = prompt('Deadline');
+      let priority = prompt('Priority ("High", "Medium", "Low")');
+      let id = Date.now().toString();
+    });
+  }
+
+  addNewTask();
+
+  function removeTask() {
+    toDoSection.on('click', (e) => {
+      if ($(e.target).hasClass('task-delete-button')) {
+        let target = $(e.target);
+        let targetId = target.parent().parent().attr('data-id');
+        let targetDiv = allTasks.filter((x) => {
+          return x.id === targetId;
+        });
+        let index = allTasks.indexOf(targetDiv[0]);
+        allTasks.splice(index, 1);
+
+        renderTasks(allTasks);
+      }
+    });
+  }
+  removeTask();
+
+  (function activeProject() {
+    allTasksButton.on('click', () => {
+      taskHeader.attr('data-id', '1');
+      renderTasks(allTasks);
+    });
+    projectsContainer.on('click', '.project-div-e1', (e) => {
+      let targetDataId = $(e.target).parent().attr('data-id');
+      taskHeader.attr('data-id', `${targetDataId}`);
+      let targetProject = projects.filter((x) => {
+        return x.id === targetDataId;
+      });
+      let targetTasks = targetProject[0].tasks;
+
+      renderTasks(targetTasks);
+    });
+  })();
+
+  /* 
+  projects[1]['tasks'].push(
+    taskFactory('Hola', 'Amigo', 'Deadline', 'low', 93)
+  );
+
+  function getProjectTasks() {
+    renderTasks(projects[1]['tasks']);
+  }
+  getProjectTasks(); */
 })();
