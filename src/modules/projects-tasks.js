@@ -122,6 +122,8 @@ let $ = require('jquery');
     }
   }
 
+  renderTasks(allTasks);
+
   function addNewTask() {
     addTaskButton.on('click', () => {
       let taskName = prompt('Task NAme');
@@ -137,15 +139,34 @@ let $ = require('jquery');
   function removeTask() {
     toDoSection.on('click', (e) => {
       if ($(e.target).hasClass('task-delete-button')) {
-        let target = $(e.target);
-        let targetId = target.parent().parent().attr('data-id');
+        //remove from all tasks
+        let targetId = $(e.target).parent().parent().attr('data-id');
         let targetDiv = allTasks.filter((x) => {
           return x.id === targetId;
         });
         let index = allTasks.indexOf(targetDiv[0]);
         allTasks.splice(index, 1);
 
-        renderTasks(allTasks);
+        //remove from projects
+        let targetProDiv = projects.filter((x) => {
+          for (let i = 0; i < x.tasks.length; i++) {
+            return x.tasks[i].id === Number(targetId);
+          }
+        });
+
+        let targetProDivArr = targetProDiv[0].tasks;
+        let positionOfTask = targetProDivArr.filter((x) => {
+          return x.id === Number(targetId);
+        });
+
+        let indexOfTask = targetProDivArr.indexOf(positionOfTask[0]);
+        targetProDivArr.splice(indexOfTask, 1);
+
+        if (taskHeader.attr('data-id') === '1') {
+          renderTasks(allTasks);
+        } else {
+          renderTasks(targetProDivArr);
+        }
       }
     });
   }
@@ -167,14 +188,4 @@ let $ = require('jquery');
       renderTasks(targetTasks);
     });
   })();
-
-  /* 
-  projects[1]['tasks'].push(
-    taskFactory('Hola', 'Amigo', 'Deadline', 'low', 93)
-  );
-
-  function getProjectTasks() {
-    renderTasks(projects[1]['tasks']);
-  }
-  getProjectTasks(); */
 })();
