@@ -78,7 +78,7 @@
     allTasksButton.on('click', () => {
       taskHeaderText.text('Tasks');
       if (taskHeader.attr('data-id')) {
-        taskHeader.removeAttr('data-id');
+        taskHeader.attr('data-id', '1');
       }
       hideMenu();
       hamburgerIcon.trigger('click');

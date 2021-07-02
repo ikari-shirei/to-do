@@ -27,7 +27,7 @@ let $ = require('jquery');
   let projectsContainer = $('#projectList');
   let addProjectButton = $('#addProjectButton');
   let projectInput = $('#pName');
-  let allTasksButton = $('all-tasks');
+  let allTasksButton = $('.all-tasks');
 
   function renderProjects() {
     clearElements(projectsContainer);
@@ -124,19 +124,68 @@ let $ = require('jquery');
 
   renderTasks(allTasks);
 
-  function addNewTask() {
+  /* 
+  projects[0].tasks.push(taskFactory('Name', 'Prooro', 'hii', 'high')); */
+
+  (function addNewTask() {
     addTaskButton.on('click', () => {
-      let taskName = prompt('Task NAme');
-      /*  let projectName = prompt('Project Name'); */
+      let taskName = prompt('Task NAae');
+      let taskHeaderId = taskHeader.attr('data-id');
+      let targetProj;
+      let projectName;
       let deadline = prompt('Deadline');
       let priority = prompt('Priority ("High", "Medium", "Low")');
       let id = Date.now().toString();
+
+      if (taskHeader.attr('data-id') === '1') {
+        targetProj = allTasks;
+        projectName = 'Tasks';
+        allTasks.push(
+          taskFactory(
+            `${taskName}`,
+            `${projectName}`,
+            `${deadline}`,
+            `${priority}`,
+            `${id}`
+          )
+        );
+        console.log(targetProj);
+      } else {
+        targetProj = projects.filter((x) => {
+          return x.id === taskHeaderId;
+        });
+        targetProj[0].tasks.push(
+          taskFactory(
+            `${taskName}`,
+            `${projectName}`,
+            `${deadline}`,
+            `${priority}`,
+            `${id}`
+          )
+        );
+        //push all tasks too
+        allTasks.push(
+          taskFactory(
+            `${taskName}`,
+            `${projectName}`,
+            `${deadline}`,
+            `${priority}`,
+            `${id}`
+          )
+        );
+        projectName = taskHeader.text();
+        console.log(targetProj[0].tasks);
+      }
+
+      if (taskHeader.attr('data-id') === '1') {
+        renderTasks(allTasks);
+      } else {
+        renderTasks(targetProj[0].tasks);
+      }
     });
-  }
+  })();
 
-  addNewTask();
-
-  function removeTask() {
+  (function removeTask() {
     toDoSection.on('click', (e) => {
       if ($(e.target).hasClass('task-delete-button')) {
         //remove from all tasks
@@ -148,29 +197,30 @@ let $ = require('jquery');
         allTasks.splice(index, 1);
 
         //remove from projects
-        let targetProDiv = projects.filter((x) => {
-          for (let i = 0; i < x.tasks.length; i++) {
-            return x.tasks[i].id === Number(targetId);
-          }
-        });
+        if (!(taskHeader.attr('data-id') === '1')) {
+          //rewrite
+          let targetProject = projects.filter((project) => {
+            for (let i = 0; i < project.tasks.length; i++) {
+              if (project.tasks[i].id === targetId) return project;
+            }
+          });
+          let targetTasksArray = targetProject[0].tasks;
 
-        let targetProDivArr = targetProDiv[0].tasks;
-        let positionOfTask = targetProDivArr.filter((x) => {
-          return x.id === Number(targetId);
-        });
-
-        let indexOfTask = targetProDivArr.indexOf(positionOfTask[0]);
-        targetProDivArr.splice(indexOfTask, 1);
+          let targetTask = targetTasksArray.filter((task) => {
+            if (task.id === targetId) return task;
+          });
+          let indexOfTask = targetTasksArray.indexOf(targetTask[0]);
+          targetTasksArray.splice(indexOfTask, 1);
+          renderTasks(targetTasksArray);
+          console.log(targetTasksArray);
+        }
 
         if (taskHeader.attr('data-id') === '1') {
           renderTasks(allTasks);
-        } else {
-          renderTasks(targetProDivArr);
         }
       }
     });
-  }
-  removeTask();
+  })();
 
   (function activeProject() {
     allTasksButton.on('click', () => {
@@ -186,6 +236,12 @@ let $ = require('jquery');
       let targetTasks = targetProject[0].tasks;
 
       renderTasks(targetTasks);
+    });
+  })();
+
+  (function renderAllTasks() {
+    allTasksButton.on('click', () => {
+      renderTasks(allTasks);
     });
   })();
 })();
