@@ -23,6 +23,7 @@ let $ = require('jquery');
   let addTaskButton = $('#addTask');
   let toDoSection = $('.to-do-section');
   let taskHeader = $('#taskHeader');
+  let todoProjectName = $('.project-name');
 
   let projectsContainer = $('#projectList');
   let addProjectButton = $('#addProjectButton');
@@ -59,7 +60,10 @@ let $ = require('jquery');
 
   (function addNewProject() {
     addProjectButton.on('click', () => {
-      if (projectInput.val()) {
+      if (projectInput.val() === 'Tasks') {
+        alert(`You can't use "Tasks" as a project name.`);
+        projectInput.val('');
+      } else if (projectInput.val()) {
         projects.push(
           projectFactory(projectInput.val(), Date.now().toString(), [])
         );
@@ -151,6 +155,7 @@ let $ = require('jquery');
         );
         console.log(targetProj);
       } else {
+        projectName = taskHeader.text();
         targetProj = projects.filter((x) => {
           return x.id === taskHeaderId;
         });
@@ -186,6 +191,7 @@ let $ = require('jquery');
   })();
 
   (function removeTask() {
+    // When removing all tasks remove from project also
     toDoSection.on('click', (e) => {
       if ($(e.target).hasClass('task-delete-button')) {
         //remove from all tasks
@@ -197,8 +203,10 @@ let $ = require('jquery');
         allTasks.splice(index, 1);
 
         //remove from projects
-        if (!(taskHeader.attr('data-id') === '1')) {
-          //rewrite
+        if (
+          !(taskHeader.attr('data-id') === '1') ||
+          !(targetDiv[0].project === 'Tasks')
+        ) {
           let targetProject = projects.filter((project) => {
             for (let i = 0; i < project.tasks.length; i++) {
               if (project.tasks[i].id === targetId) return project;
@@ -211,7 +219,10 @@ let $ = require('jquery');
           });
           let indexOfTask = targetTasksArray.indexOf(targetTask[0]);
           targetTasksArray.splice(indexOfTask, 1);
-          renderTasks(targetTasksArray);
+          if (!(taskHeader.attr('data-id') === '1')) {
+            renderTasks(targetTasksArray);
+            console.log(targetTasksArray);
+          }
           console.log(targetTasksArray);
         }
 
