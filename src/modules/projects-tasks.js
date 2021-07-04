@@ -7,28 +7,36 @@ let $ = require('jquery');
   let projects =
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_PROJECT_KEY)) || [];
 
-  // Local storage section
-
   function saveToStorage() {
     localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(projects));
   }
 
   // Project add - remove
+
   function projectFactory(name, id, tasks) {
     return { name, id, tasks };
   }
 
-  let allTasks = [];
+  const LOCAL_STORAGE_ALL_TASKS_KEY = 'task.allTasks';
 
-  let addTaskButton = $('#addTask');
-  let toDoSection = $('.to-do-section');
-  let taskHeader = $('#taskHeader');
-  let todoProjectName = $('.project-name');
+  let allTasks =
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_ALL_TASKS_KEY)) || [];
+
+  function saveToStorageTasks() {
+    localStorage.setItem(LOCAL_STORAGE_ALL_TASKS_KEY, JSON.stringify(allTasks));
+  }
 
   let projectsContainer = $('#projectList');
   let addProjectButton = $('#addProjectButton');
   let projectInput = $('#pName');
   let allTasksButton = $('.all-tasks');
+
+  let addTaskButton = $('#addTask');
+  let toDoSection = $('.to-do-section');
+  let taskHeader = $('#taskHeader');
+  let toDoForm = $('.to-do-form');
+  toDoForm.hide();
+  let toDoFormButton = $('#to-do-form-submit');
 
   function renderProjects() {
     clearElements(projectsContainer);
@@ -126,20 +134,61 @@ let $ = require('jquery');
     }
   }
 
-  renderTasks(allTasks);
+  function renderAndSaveTasks(project) {
+    saveToStorageTasks();
+    saveToStorage();
+    renderTasks(project);
+  }
 
-  /* 
-  projects[0].tasks.push(taskFactory('Name', 'Prooro', 'hii', 'high')); */
+  renderAndSaveTasks(allTasks);
+
+  (function openTaskFormButton() {
+    addTaskButton.on('click', () => {
+      toDoForm.show();
+      $('#TDFtName').trigger('focus');
+    });
+  })();
+
+  (function closeTaskFormButton() {
+    $('.tdf-close-button').on('click', () => {
+      toDoForm.hide();
+      toDoFormReset();
+    });
+  })();
+
+  function toDoFormReset() {
+    $('#TDFtName').val('');
+    $('#TDFdName').val('');
+    /*  $('input[name="radio-priority"]').prop('checked', false); */
+    $('#low[name="radio-priority"]').prop('checked', true);
+    toDoForm.hide();
+  }
+  toDoFormReset();
+
+  function toDoFormBehavior() {
+    toDoForm.on('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        toDoFormButton.trigger('click');
+      }
+    });
+  }
+  toDoFormBehavior();
 
   (function addNewTask() {
-    addTaskButton.on('click', () => {
-      let taskName = prompt('Task NAae');
+    //Form
+    toDoFormButton.on('click', () => {
+      let taskName = $('#TDFtName').val();
       let taskHeaderId = taskHeader.attr('data-id');
       let targetProj;
       let projectName;
-      let deadline = prompt('Deadline');
-      let priority = prompt('Priority ("High", "Medium", "Low")');
+      let deadline = $('#TDFdName').val();
+      let priority = $('input[name="radio-priority"]:checked')
+        .val()
+        .toLowerCase();
       let id = Date.now().toString();
+
+      toDoFormReset();
 
       if (taskHeader.attr('data-id') === '1') {
         targetProj = allTasks;
@@ -153,7 +202,6 @@ let $ = require('jquery');
             `${id}`
           )
         );
-        console.log(targetProj);
       } else {
         projectName = taskHeader.text();
         targetProj = projects.filter((x) => {
@@ -168,7 +216,7 @@ let $ = require('jquery');
             `${id}`
           )
         );
-        //push all tasks too
+        // Push them tasks section too
         allTasks.push(
           taskFactory(
             `${taskName}`,
@@ -179,13 +227,12 @@ let $ = require('jquery');
           )
         );
         projectName = taskHeader.text();
-        console.log(targetProj[0].tasks);
       }
 
       if (taskHeader.attr('data-id') === '1') {
-        renderTasks(allTasks);
+        renderAndSaveTasks(allTasks);
       } else {
-        renderTasks(targetProj[0].tasks);
+        renderAndSaveTasks(targetProj[0].tasks);
       }
     });
   })();
@@ -220,14 +267,12 @@ let $ = require('jquery');
           let indexOfTask = targetTasksArray.indexOf(targetTask[0]);
           targetTasksArray.splice(indexOfTask, 1);
           if (!(taskHeader.attr('data-id') === '1')) {
-            renderTasks(targetTasksArray);
-            console.log(targetTasksArray);
+            renderAndSaveTasks(targetTasksArray);
           }
-          console.log(targetTasksArray);
         }
 
         if (taskHeader.attr('data-id') === '1') {
-          renderTasks(allTasks);
+          renderAndSaveTasks(allTasks);
         }
       }
     });
@@ -236,7 +281,7 @@ let $ = require('jquery');
   (function activeProject() {
     allTasksButton.on('click', () => {
       taskHeader.attr('data-id', '1');
-      renderTasks(allTasks);
+      renderAndSaveTasks(allTasks);
     });
     projectsContainer.on('click', '.project-div-e1', (e) => {
       let targetDataId = $(e.target).parent().attr('data-id');
@@ -246,13 +291,26 @@ let $ = require('jquery');
       });
       let targetTasks = targetProject[0].tasks;
 
-      renderTasks(targetTasks);
+      renderAndSaveTasks(targetTasks);
     });
   })();
 
   (function renderAllTasks() {
     allTasksButton.on('click', () => {
-      renderTasks(allTasks);
+      renderAndSaveTasks(allTasks);
+    });
+  })();
+
+  (function taskBehavior() {
+    // Also need to remove task
+    toDoSection.on('click', (e) => {
+      if ($(e.target).hasClass('tick-button')) {
+        $(e.target).toggleClass('task-completed-tick');
+        $(e.target)
+          .parent()
+          .parent()
+          .toggleClass('task-completed-line-through');
+      }
     });
   })();
 })();
