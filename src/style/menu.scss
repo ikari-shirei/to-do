@@ -32,16 +32,20 @@
       margin: 16px 20px 16px 0;
       form {
         display: flex;
+        justify-content: space-between;
         flex-direction: row;
         flex-wrap: wrap;
         width: 316px;
         div {
+          margin-left: 16px;
           input {
-            margin: 8px 16px 0px 0;
-            max-width: 180px;
+            margin: 8px 0px 0px 0;
+            width: 215px;
+            @include inputStyleProjects;
           }
           button {
-            margin: 8px 8px 0px 0px;
+            @include projectButton;
+            margin: 8px 0px 0px 0px;
             min-width: 60px;
             @include cursorPointer;
           }

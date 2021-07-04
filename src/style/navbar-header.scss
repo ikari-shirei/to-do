@@ -50,3 +50,14 @@
     }
   }
 }
+
+@media only screen and (min-width: 700px) {
+  #navbar {
+    justify-content: flex-start;
+    div {
+      &:nth-child(2) {
+        margin-left: 8px;
+      }
+    }
+  }
+}

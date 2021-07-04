@@ -53,3 +53,66 @@
     }
   }
 }
+
+.task-completed-tick {
+  background-color: $blue;
+  color: $blue;
+}
+
+.task-completed-line-through {
+  text-decoration: line-through;
+}
+
+.to-do-form {
+  position: absolute;
+  right: 20px;
+  top: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 250px;
+  padding: 16px;
+  background-color: $blue;
+  color: white;
+  border: 2px solid $yellow;
+  img {
+    @include cursorPointer;
+    align-self: flex-end !important;
+    width: 24px;
+    height: 24px;
+    margin: 8px 0;
+  }
+  .main-form-div {
+    display: flex;
+    flex-direction: column;
+    margin: 8px 0;
+    .form-header {
+      font-weight: 800;
+    }
+    input {
+      @include inputStyleTaskAdd;
+      margin: 8px 0;
+    }
+    .radio-buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      margin-top: 8px;
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        label {
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+  button {
+    @include taskAddButton;
+    @include cursorPointer;
+    margin: 8px 0;
+  }
+}
