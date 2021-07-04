@@ -7,6 +7,7 @@ let $ = require('jquery');
   let addProjectButton = $('#addProjectButton');
   let projectInput = $('#pName');
   let allTasksButton = $('.all-tasks');
+  let menuButton = $('.hamburger-menu');
 
   // Task variables
   let addTaskButton = $('#addTask');
@@ -164,6 +165,10 @@ let $ = require('jquery');
       toDoForm.hide();
       toDoFormReset();
     });
+    menuButton.on('click', () => {
+      toDoForm.hide();
+      toDoFormReset();
+    });
   })();
 
   // Clear current values of task adding form
@@ -309,7 +314,6 @@ let $ = require('jquery');
 
   // Tick button clicked
   (function taskBehavior() {
-    // Also need to remove task
     toDoSection.on('click', (e) => {
       if ($(e.target).hasClass('tick-button')) {
         $(e.target).toggleClass('task-completed-tick');
@@ -317,6 +321,23 @@ let $ = require('jquery');
           .parent()
           .parent()
           .toggleClass('task-completed-line-through');
+      }
+    });
+
+    //Remove Task
+    toDoSection.on('click', (e) => {
+      if ($(e.target).hasClass('tick-button')) {
+        $(e.target)
+          .parent()
+          .parent()
+          .delay(900)
+          .fadeOut(1500, () => {
+            $(e.target)
+              .parent()
+              .parent()
+              .find('.task-delete-button')
+              .trigger('click');
+          });
       }
     });
   })();
