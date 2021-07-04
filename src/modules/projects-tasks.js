@@ -2,6 +2,21 @@ import createTaskDOM from '/src/modules/task-create-DOM.js';
 let $ = require('jquery');
 
 (function projectsAndTasks() {
+  // Project variables
+  let projectsContainer = $('#projectList');
+  let addProjectButton = $('#addProjectButton');
+  let projectInput = $('#pName');
+  let allTasksButton = $('.all-tasks');
+
+  // Task variables
+  let addTaskButton = $('#addTask');
+  let toDoSection = $('.to-do-section');
+  let taskHeader = $('#taskHeader');
+  let toDoForm = $('.to-do-form');
+  toDoForm.hide();
+  let toDoFormButton = $('#to-do-form-submit');
+
+  // Projects local storage
   const LOCAL_STORAGE_PROJECT_KEY = 'task.projects';
 
   let projects =
@@ -11,12 +26,7 @@ let $ = require('jquery');
     localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(projects));
   }
 
-  // Project add - remove
-
-  function projectFactory(name, id, tasks) {
-    return { name, id, tasks };
-  }
-
+  // All taskslocal storage
   const LOCAL_STORAGE_ALL_TASKS_KEY = 'task.allTasks';
 
   let allTasks =
@@ -26,18 +36,12 @@ let $ = require('jquery');
     localStorage.setItem(LOCAL_STORAGE_ALL_TASKS_KEY, JSON.stringify(allTasks));
   }
 
-  let projectsContainer = $('#projectList');
-  let addProjectButton = $('#addProjectButton');
-  let projectInput = $('#pName');
-  let allTasksButton = $('.all-tasks');
+  // Projects
+  function projectFactory(name, id, tasks) {
+    return { name, id, tasks };
+  }
 
-  let addTaskButton = $('#addTask');
-  let toDoSection = $('.to-do-section');
-  let taskHeader = $('#taskHeader');
-  let toDoForm = $('.to-do-form');
-  toDoForm.hide();
-  let toDoFormButton = $('#to-do-form-submit');
-
+  // Display project array
   function renderProjects() {
     clearElements(projectsContainer);
     if (projects.length > 0) {
@@ -52,6 +56,7 @@ let $ = require('jquery');
     }
   }
 
+  // Clear current projects from display
   function clearElements(container) {
     if (container.children()) {
       container.children().remove();
@@ -101,6 +106,7 @@ let $ = require('jquery');
     });
   })();
 
+  // Add project when enter is pressed
   (function formBehavior() {
     projectInput.on('keypress', (e) => {
       if (e.key === 'Enter') {
@@ -109,12 +115,12 @@ let $ = require('jquery');
     });
   })();
 
-  //Tasks
-
+  // Tasks
   function taskFactory(name, project, deadline, priority, id) {
     return { name, project, deadline, priority, id };
   }
 
+  // Append selected tasks
   function renderTasks(project) {
     clearElements(toDoSection);
     project.forEach((task) => {
@@ -128,12 +134,14 @@ let $ = require('jquery');
     });
   }
 
+  // Clear current tasks from display
   function clearElements(container) {
     if (container.children()) {
       container.children().remove();
     }
   }
 
+  // Append current tasks and save to local storage
   function renderAndSaveTasks(project) {
     saveToStorageTasks();
     saveToStorage();
@@ -142,6 +150,7 @@ let $ = require('jquery');
 
   renderAndSaveTasks(allTasks);
 
+  // Open task adding form
   (function openTaskFormButton() {
     addTaskButton.on('click', () => {
       toDoForm.show();
@@ -149,6 +158,7 @@ let $ = require('jquery');
     });
   })();
 
+  // Close task adding form
   (function closeTaskFormButton() {
     $('.tdf-close-button').on('click', () => {
       toDoForm.hide();
@@ -156,6 +166,7 @@ let $ = require('jquery');
     });
   })();
 
+  // Clear current values of task adding form
   function toDoFormReset() {
     $('#TDFtName').val('');
     $('#TDFdName').val('');
@@ -165,15 +176,15 @@ let $ = require('jquery');
   }
   toDoFormReset();
 
-  function toDoFormBehavior() {
+  // Trigger task adding when enter is pressed
+  (function toDoFormBehavior() {
     toDoForm.on('keypress', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         toDoFormButton.trigger('click');
       }
     });
-  }
-  toDoFormBehavior();
+  })();
 
   (function addNewTask() {
     //Form
@@ -278,6 +289,7 @@ let $ = require('jquery');
     });
   })();
 
+  // Append selected project's tasks
   (function activeProject() {
     allTasksButton.on('click', () => {
       taskHeader.attr('data-id', '1');
@@ -295,12 +307,7 @@ let $ = require('jquery');
     });
   })();
 
-  (function renderAllTasks() {
-    allTasksButton.on('click', () => {
-      renderAndSaveTasks(allTasks);
-    });
-  })();
-
+  // Tick button clicked
   (function taskBehavior() {
     // Also need to remove task
     toDoSection.on('click', (e) => {
