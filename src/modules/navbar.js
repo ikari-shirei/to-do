@@ -59,7 +59,7 @@
         //close menu
       } else {
         $(e.target).toggleClass('hamburger-menu');
-        $(e.target).attr('src', '/dist/images/menu-icon.svg');
+        $(e.target).attr('src', './images/menu-icon.svg');
         hideMenu();
       }
     });
