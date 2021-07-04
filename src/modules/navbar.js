@@ -53,7 +53,7 @@
       //open menu
       if ($(e.target).hasClass('hamburger-menu')) {
         $(e.target).toggleClass('hamburger-menu');
-        $(e.target).attr('src', '/dist/images/close-icon-blue.svg');
+        $(e.target).attr('src', './images/close-icon-blue.svg');
         showMenu();
 
         //close menu
