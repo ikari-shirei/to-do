@@ -50,7 +50,7 @@ let $ = require('jquery');
         projectsContainer.append(
           `<div class="project-div" data-id="${project.id}">
           <div class="project-div-e1">${project.name}</div>
-          <img class="project-div-e2" src="/dist/images/close-icon.svg" />
+          <img class="project-div-e2" src="./images/close-icon.svg" />
           </div>`
         );
       });
